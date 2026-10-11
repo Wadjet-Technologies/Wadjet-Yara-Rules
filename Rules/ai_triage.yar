@@ -1,7 +1,7 @@
 rule Gaslight
 {
     meta:
-        description: "Gaslight Malware uses AI triaging system on Mac OS to make the system believe it has been compromised in order to actually compromise the system. " 
+        description = "Gaslight Malware uses AI triaging system on Mac OS to make the system believe it has been compromised in order to actually compromise the system. " 
     strings:
         $Adhoc_signing_identifier = "endpoint-macos-aarch64-5555494492fc075f441637fb9d894913dde3a2ea"
         $LaunchAgentLabel = "com.apple.system.services.activity"
@@ -11,5 +11,5 @@ rule Gaslight
         $bonzai_sample = "77b4fd46994992f0e57302cfe76ed23c0d90101381d2b89fc2ddf5c4536e77ca"
     
     condition:
-        $Adhoc_signing_identifier or $LaunchAgentLabel or pythonPayLoad
+        $Adhoc_signing_identifier or $LaunchAgentLabel or $pythonPayLoad
 }
