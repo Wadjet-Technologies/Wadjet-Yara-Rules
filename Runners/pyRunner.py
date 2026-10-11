@@ -1,7 +1,8 @@
 import os, yara, traceback, psutil 
 
 rules = yara.compile(filepaths={'URLs': 'Rules/urls.yar'
-                                ,'Files': 'Rules/files.yar'}
+                                ,'Files': 'Rules/files.yar'
+                                ,'Memory': 'Rules/memory.yar'}
                     , externals={'filename': ''})
 
 TARGET_FOLDER = r"C:\\Program Files"
@@ -17,8 +18,10 @@ for root, dirs, files in os.walk(TARGET_FOLDER):
                 # 5. If a match is found, report it
                 if matches:
                     print(f"[ALERT] Match found in: {file_path}")
-                    print(f"        Rules triggered: {matches}\n")
-                    
+                    for m in matches:
+                        print(f"    - Rule: {m.rule} (Namespace: {m.namespace})")
+                        print(f"            ON: {m.strings}\n")
+
             except yara.Error:
                 # Skips files that can't be processed (e.g., zero bytes or corrupted)
                 print(f"[!] Error processing file: {file_path}")
@@ -39,7 +42,7 @@ for proc in psutil.process_iter(["pid", "name", 'exe']):
     if matches:
       print(f"[+] Match in {name} (PID: {pid} | Executable: {exe}):")
       for m in matches:
-        print(f"    - {m}")
+        print(f"    - {m.rule} (Namespace: {m.namespace}) \n {m}")
   except (psutil.AccessDenied, psutil.NoSuchProcess, yara.Error) as e:
     # Skip processes protected by the OS or that exit during scanning
     print(f"[!] Could not scan process: {name} (PID: {pid} | Executable: {exe})")
