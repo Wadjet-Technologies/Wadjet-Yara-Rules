@@ -12,3 +12,12 @@ rule ambking1234 {
         $bad_url_regex
 }
 
+rule immortales {
+    meta:
+        description = "Info Stealer Malware from urhaus.abuse.ch"
+    strings:
+        $url_regex = /https?:\/\/[a-zA-Z0-9\-\.]*immortales.fun\/[a-zA-Z0-9_\-\/\?\=\&]+/ nocase
+
+    condition:
+        $url_regex
+}

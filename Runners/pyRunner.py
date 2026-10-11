@@ -1,7 +1,8 @@
 import os, yara 
 
 rules = yara.compile(filepaths={'URLs': 'Rules/urls.yar'
-                                ,'Files': 'Rules/files.yar'})
+                                ,'Files': 'Rules/files.yar'}
+                    , externals={'filename': ''})
 
 TARGET_FOLDER = r"C:\\Program Files"
 print(f"Scanning folder: {TARGET_FOLDER}\n")
@@ -11,7 +12,7 @@ for root, dirs, files in os.walk(TARGET_FOLDER):
             
             try:
                 # 4. Scan the individual file
-                matches = rules.match(file_path)
+                matches = rules.match(file_path, externals={'filename': file})
                 
                 # 5. If a match is found, report it
                 if matches:
