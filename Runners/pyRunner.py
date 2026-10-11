@@ -1,12 +1,11 @@
 import os, yara 
 
 rules = yara.compile(filepaths={'URLs': 'Rules/urls.yar'
-                                })
+                                ,'Files': 'Rules/files.yar'})
 
 TARGET_FOLDER = r"C:\\Program Files"
 print(f"Scanning folder: {TARGET_FOLDER}\n")
 for root, dirs, files in os.walk(TARGET_FOLDER):
-        print(f"Scanning directory: {root}")
         for file in files:
             file_path = os.path.join(root, file)
             
