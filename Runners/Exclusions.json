@@ -1,7 +1,9 @@
 {"Rule Exclusions": 
             [{"hashes": {
-                    "MD5":"5d41402abc4b2a76b9719d911017c592"}
-            ,"filenames": ["safe_updater.exe"]
+                    "MD5":""
+                        ,"SHA256":""
+                        ,"SHA512":""}
+            ,"filenames": ["test.exe"]
             , "rules_excluded":[{"namespace":"urls","rule_name":"immortals"}]
             }]
  ,"Path Exclusions": ["C:\\\\Tools\\WadjetLLC\\","C:\\\\OneDriveTemp\\"]
