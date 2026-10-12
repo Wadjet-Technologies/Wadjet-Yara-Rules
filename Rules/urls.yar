@@ -23,3 +23,14 @@ rule immortales {
     condition:
         $url_regex
 }
+
+rule fake_claude{
+    meta:
+        description = "Fake claud ad redirects to fake claude download page designed to trick macOS users into executing malicious commands"
+
+    strings:
+        $url1= "claude-desk-code.com"
+
+    condition:
+        $url1
+}

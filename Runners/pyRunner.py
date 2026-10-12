@@ -1,13 +1,16 @@
-import os, yara, traceback, psutil 
+import os, yara, traceback, psutil, json 
 
 rules = yara.compile(filepaths={'URLs': 'Rules/urls.yar'
                                 ,'Files': 'Rules/files.yar'
                                 ,'Memory': 'Rules/memory.yar'}
                     , externals={'filename': ''})
-
-TARGET_FOLDER = r"C:\\Program Files"
+exclusions = json.load(open('Runners/Exclusions.json', 'r'))
+TARGET_FOLDER = r"C:\\"
 print(f"Scanning folder: {TARGET_FOLDER}\n")
 for root, dirs, files in os.walk(TARGET_FOLDER):
+        if any(excluded_path in root for excluded_path in exclusions.get("Path Exclusions", [])):
+            print(f"[🔄] Skipping excluded path: {root}")
+            continue
         for file in files:
             file_path = os.path.join(root, file)
             
