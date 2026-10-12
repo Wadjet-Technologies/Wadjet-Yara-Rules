@@ -4,7 +4,8 @@
                         ,"SHA256":""
                         ,"SHA512":""}
             ,"filenames": ["test.exe"]
-            , "rules_excluded":[{"namespace":"urls","rule_name":"immortals"}]
+            , "rules_excluded":[{"namespace":"urls"
+                                ,"rule_name":"immortals"}]
             }]
  ,"Path Exclusions": ["C:\\\\Tools\\WadjetLLC\\","C:\\\\OneDriveTemp\\"]
             

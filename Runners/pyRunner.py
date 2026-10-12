@@ -25,10 +25,10 @@ for root, dirs, files in os.walk(TARGET_FOLDER):
                         print(f"    - Rule: {m.rule} (Namespace: {m.namespace})")
                         print(f"            ON: {m.strings}\n")
 
-            except yara.Error:
+            except yara.Error as e:
                 # Skips files that can't be processed (e.g., zero bytes or corrupted)
                 print(f"[!] Error processing file: {file_path}")
-                print( traceback.format_exc())
+                print(f"    Error: {e}")
                 continue
             except PermissionError:
                 # Skips protected system files or directories without read access
