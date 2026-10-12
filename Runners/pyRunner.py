@@ -20,7 +20,7 @@ for root, dirs, files in os.walk(TARGET_FOLDER):
                 
                 # 5. If a match is found, report it
                 if matches:
-                    print(f"[ALERT] Match found in: {file_path}")
+                    print(f"[🚨ALERT] Match found in: {file_path}")
                     for m in matches:
                         print(f"    - Rule: {m.rule} (Namespace: {m.namespace})")
                         print(f"            ON: {m.strings}\n")

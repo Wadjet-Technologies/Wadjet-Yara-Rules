@@ -4,6 +4,6 @@
             ,"filenames": ["safe_updater.exe"]
             , "rules_excluded":[{"namespace":"urls","rule_name":"immortals"}]
             }]
- ,"Path Exclusions": ["C:\\Tools\\WadjetLLC","C:\\OneDriveTemp\\"]
+ ,"Path Exclusions": ["C:\\\\Tools\\WadjetLLC\\","C:\\\\OneDriveTemp\\"]
             
 }
