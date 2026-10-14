@@ -7,6 +7,6 @@
             , "rules_excluded":[{"namespace":"urls"
                                 ,"rule_name":"immortals"}]
             }]
- ,"Path Exclusions": ["C:\\\\Tools\\WadjetLLC\\","C:\\\\OneDriveTemp\\"]
+ ,"Path Exclusions": ["C:\\\\OneDriveTemp\\"]
             
 }
