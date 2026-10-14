@@ -9,11 +9,13 @@ TARGET_FOLDER = r"C:\\"
 print(f"Scanning folder: {TARGET_FOLDER}\n")
 for root, dirs, files in os.walk(TARGET_FOLDER):
         if any(excluded_path in root for excluded_path in exclusions.get("Path Exclusions", [])):
-            print(f"[🔄] Skipping excluded path: {root}")
+            print(f"[🔄] Skipping Parent excluded path: {root}")
             continue
         for file in files:
             file_path = os.path.join(root, file)
-            
+            if any(excluded_path in file_path for excluded_path in exclusions.get("Path Exclusions", [])):
+                        print(f"[🔄] Skipping excluded file: {file_path}")
+                        continue
             try:
                 # 4. Scan the individual file
                 matches = rules.match(file_path, externals={'filename': file})
@@ -28,7 +30,7 @@ for root, dirs, files in os.walk(TARGET_FOLDER):
             except yara.Error as e:
                 # Skips files that can't be processed (e.g., zero bytes or corrupted)
                 print(f"[!] Error processing file: {file_path}")
-                print(f"    Error: {e}")
+                print(f"    Error: {e}", root)
                 continue
             except PermissionError:
                 # Skips protected system files or directories without read access
