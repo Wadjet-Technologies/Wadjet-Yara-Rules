@@ -34,3 +34,16 @@ rule fake_claude{
     condition:
         $url1
 }
+
+rule Conti_Ransomeware {
+    meta:
+        description = "CISA listed domains associated with Conti Ransomware"
+        reference = "https://www.bleepingcomputer.com/news/security/cisa-updates-conti-ransomware-alert-with-nearly-100-domain-names/"
+    strings:
+        $url1 = "badiwaw.com"
+        $url2 = "balacif.com"
+        $url3 = "barovur.com"
+    
+    condition:
+        any of them
+}
