@@ -1,13 +1,16 @@
 import os, yara, traceback, psutil, json 
 
-rules = yara.compile(filepaths={'URLs': 'Rules/urls.yar'
-                                ,'Files': 'Rules/files.yar'
-                                ,'Memory': 'Rules/memory.yar'}
-                    , externals={'filename': ''})
-exclusions = json.load(open('Runners/Exclusions.json', 'r'))
-TARGET_FOLDER = r"C:\\"
-print(f"Scanning folder: {TARGET_FOLDER}\n")
-for root, dirs, files in os.walk(TARGET_FOLDER):
+def load_yara():
+    rules= yara.compile(filepaths={'URLs': 'Rules/urls.yar'
+                                    ,'Files': 'Rules/files.yar'
+                                    ,'Memory': 'Rules/memory.yar'}
+                        , externals={'filename': ''})
+
+    exclusions = json.load(open('Runners/Exclusions.json', 'r'))
+    return rules, exclusions
+
+def scan_folder(rules, exclusions, TARGET_FOLDER = r"C:\\"):
+    for root, dirs, files in os.walk(TARGET_FOLDER):
         if any(excluded_path in root for excluded_path in exclusions.get("Path Exclusions", [])):
             print(f"[🔄] Skipping Parent excluded path: {root}")
             continue
@@ -36,23 +39,37 @@ for root, dirs, files in os.walk(TARGET_FOLDER):
                 # Skips protected system files or directories without read access
                 print(f"[!] Permission denied: {file_path}")
                 continue
-print("Folder scan complete. Scanning Memory...\n")
-for proc in psutil.process_iter(["pid", "name", 'exe']):
-  try:
-    name = proc.info['name']
-    pid = proc.info['pid']
-    exe = proc.info['exe']
 
-    matches = rules.match(pid=pid)
-    if matches:
-      print(f"[+] Match in {name} (PID: {pid} | Executable: {exe}):")
-      for m in matches:
-        print(f"    - {m.rule} (Namespace: {m.namespace}) \n {m}")
-  except (psutil.AccessDenied, psutil.NoSuchProcess, yara.Error) as e:
-    # Skip processes protected by the OS or that exit during scanning
-    print(f"[!] Could not scan process: {name} (PID: {pid} | Executable: {exe})")
-    print("    Error:", e)
-    continue
+
+def scan_memory(rules, exclusions):
+    for proc in psutil.process_iter(["pid", "name", 'exe']):
+        try:
+            name = proc.info['name']
+            pid = proc.info['pid']
+            exe = proc.info['exe']
+
+            matches = rules.match(pid=pid)
+            if matches:
+                print(f"[+] Match in {name} (PID: {pid} | Executable: {exe}):")
+                for m in matches:
+                    print(f"    - {m.rule} (Namespace: {m.namespace}) \n {m}")
+        except (psutil.AccessDenied, psutil.NoSuchProcess, yara.Error) as e:
+            # Skip processes protected by the OS or that exit during scanning
+            print(f"[!] Could not scan process: {name} (PID: {pid} | Executable: {exe})")
+            print("    Error:", e)
+            continue
   
   
-print("Scanning completed.")
+
+
+if __name__ == "__main__":
+    print("Loading YARA rules and exclusions...\n")
+    rules, exclusions = load_yara()
+
+    print("Starting folder scan...\n")
+    scan_folder(rules, exclusions)
+
+    print("Folder scan complete. Scanning Memory...\n")
+    scan_memory(rules, exclusions)
+    print("Memory scan complete.")
+    print("Scanning complete. Exiting.")
