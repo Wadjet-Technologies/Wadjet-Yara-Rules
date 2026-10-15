@@ -3,7 +3,8 @@ import os, yara, traceback, psutil, json
 def load_yara():
     rules= yara.compile(filepaths={'URLs': 'Rules/urls.yar'
                                     ,'Files': 'Rules/files.yar'
-                                    ,'Memory': 'Rules/memory.yar'}
+                                    ,'Memory': 'Rules/memory.yar'
+                                    ,'Plugins': 'Rules/plugins.yar'}
                         , externals={'filename': ''})
 
     exclusions = json.load(open('Runners/Exclusions.json', 'r'))
